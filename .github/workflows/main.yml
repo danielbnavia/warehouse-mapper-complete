@@ -10,6 +10,8 @@ jobs:
   lint-frontend:
     name: Lint Frontend
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: ./warehouse-mapper/frontend
@@ -33,6 +35,8 @@ jobs:
   build-frontend:
     name: Build Frontend
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: lint-frontend
     defaults:
       run:
@@ -57,6 +61,8 @@ jobs:
   test-backend:
     name: Test Backend
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: ./warehouse-mapper/backend
