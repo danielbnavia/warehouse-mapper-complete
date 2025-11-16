@@ -632,6 +632,15 @@ Example:
 
         fileUploadZone.addEventListener('click', () => fileInput.click());
         
+        // Helper function to escape HTML
+        function escapeHtml(s) {
+            return s.replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+        }
+        
         fileUploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             fileUploadZone.classList.add('dragover');
@@ -658,7 +667,7 @@ Example:
             reader.onload = (e) => {
                 document.getElementById('scopeInput').value = e.target.result;
                 document.querySelector('.upload-text').innerHTML = 
-                    `✅ <strong>${file.name}</strong> loaded<br><small>Ready to analyze</small>`;
+                    `✅ <strong>${escapeHtml(file.name)}</strong> loaded<br><small>Ready to analyze</small>`;
             };
             reader.readAsText(file);
         }
