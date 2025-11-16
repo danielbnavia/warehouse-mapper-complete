@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "zapier": {
+      "url": "https://mcp.zapier.com/api/mcp/s/YmNjNmUyZTgtZjFkYy00OWM4LTg3ZTEtZmI1MDE4MDBiODY1OjdkODRkZmZmLWI4ZWQtNDczMy04YTlmLTRmZjc2NWFjNWQxMg==/mcpcontinue",
+      "description": "Zapier MCP integration for email-to-task automation"
+    }
+  }
+}

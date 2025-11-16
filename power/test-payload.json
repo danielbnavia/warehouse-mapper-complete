@@ -1,0 +1,67 @@
+{
+  "timestamp": "2025-11-16T10:30:00Z",
+  "scopeDocument": {
+    "title": "Test Integration - Shopify to BGI Warehouse",
+    "rawText": "Integration scope for e-commerce fulfillment..."
+  },
+  "analysis": {
+    "systems": [
+      "Shopify",
+      "BGI Warehouse",
+      "ShipStation",
+      "Raft.ai"
+    ],
+    "missingInformation": [
+      {
+        "item": "Shopify API credentials",
+        "category": "Technical",
+        "priority": "high"
+      },
+      {
+        "item": "BGI warehouse endpoint URL",
+        "category": "Technical",
+        "priority": "high"
+      },
+      {
+        "item": "Expected order volume per day",
+        "category": "Business",
+        "priority": "medium"
+      }
+    ]
+  },
+  "actionItems": [
+    {
+      "title": "Configure Shopify webhook for order events",
+      "description": "Set up webhook endpoint to receive order created/updated events from Shopify",
+      "priority": "high",
+      "category": "Technical Setup",
+      "dueInDays": 3
+    },
+    {
+      "title": "Create BGI API integration account",
+      "description": "Provision API credentials and configure access permissions for BGI warehouse system",
+      "priority": "high",
+      "category": "Account Setup",
+      "dueInDays": 5
+    },
+    {
+      "title": "Map order fields between Shopify and BGI",
+      "description": "Document field mapping for order data transformation",
+      "priority": "medium",
+      "category": "Documentation",
+      "dueInDays": 7
+    },
+    {
+      "title": "Set up error monitoring and alerts",
+      "description": "Configure logging and alerting for integration failures",
+      "priority": "medium",
+      "category": "Operations",
+      "dueInDays": 10
+    }
+  ],
+  "metadata": {
+    "analyzedBy": "Scope Mapper PRO v3.0",
+    "customer": "Test Customer Inc",
+    "projectType": "E-commerce Fulfillment"
+  }
+}

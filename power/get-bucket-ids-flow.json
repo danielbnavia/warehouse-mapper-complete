@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "$connections": {
+      "defaultValue": {},
+      "type": "Object"
+    }
+  },
+  "triggers": {
+    "manual": {
+      "type": "Request",
+      "kind": "Button",
+      "inputs": {
+        "schema": {}
+      }
+    }
+  },
+  "actions": {
+    "List_buckets": {
+      "type": "ApiConnection",
+      "inputs": {
+        "host": {
+          "connection": {
+            "name": "@parameters('$connections')['planner']['connectionId']"
+          }
+        },
+        "method": "get",
+        "path": "/v1.0/planner/plans/@{encodeURIComponent('e5aef5db-e919-474b-a2df-8ceb63932d79')}/buckets"
+      },
+      "runAfter": {}
+    },
+    "Compose_Bucket_IDs": {
+      "type": "Compose",
+      "inputs": "@body('List_buckets')?['value']",
+      "runAfter": {
+        "List_buckets": [
+          "Succeeded"
+        ]
+      }
+    },
+    "Response": {
+      "type": "Response",
+      "kind": "Http",
+      "inputs": {
+        "statusCode": 200,
+        "body": "@outputs('Compose_Bucket_IDs')"
+      },
+      "runAfter": {
+        "Compose_Bucket_IDs": [
+          "Succeeded"
+        ]
+      }
+    }
+  }
+}

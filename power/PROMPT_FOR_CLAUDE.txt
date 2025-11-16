@@ -1,0 +1,38 @@
+I need help configuring a Microsoft Power Automate flow that creates Planner tasks from integration scope analysis data.
+
+**Context:**
+I have a Power Automate flow that receives JSON data from a webhook and should create tasks in Microsoft Planner. The flow has placeholder values that need to be replaced with actual Bucket IDs from my Planner board.
+
+**What I have:**
+- Team ID: 6cdbd2a2-7e69-492e-ad7e-a617ed1c6597
+- Plan ID: e5aef5db-e919-474b-a2df-8ceb63932d79
+- Plan URL: https://planner.cloud.microsoft/webui/premiumplan/e5aef5db-e919-474b-a2df-8ceb63932d79/org/c6acd9de-92a6-4930-a83f-fbf0562b3c71/view/grid?tid=2131d362-e12d-44c1-843b-a1413d6b96a3
+
+**My Planner buckets:**
+- Scope
+- Analysis/Software Requirements
+- Design
+- Development
+- Testing
+- Training
+- Documentation
+- Deployment
+- Post Implementation Review
+
+**What I need:**
+1. Get the Bucket ID for "Analysis/Software Requirements"
+2. Update my Power Automate flow JSON file with the correct Bucket IDs
+3. Test the flow to make sure tasks are created correctly
+
+**Files attached:**
+- INSTRUCTIONS_FOR_AI_ASSISTANT.md (detailed guide for you)
+- Power Automate flow JSON file (needs bucket IDs updated)
+- get-bucket-ids-flow.json (helper flow to get bucket IDs)
+- test-payload.json (sample data to test with)
+
+Please read the INSTRUCTIONS_FOR_AI_ASSISTANT.md file first and help me step-by-step to:
+1. Get the bucket IDs
+2. Update the flow file
+3. Test it
+
+Let's start!

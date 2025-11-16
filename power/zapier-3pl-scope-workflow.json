@@ -1,0 +1,108 @@
+{
+  "name": "3PL Scope Email → Trello Tasks",
+  "description": "Automatically parse warehouse 3PL scope documents from email and create organized Trello tasks",
+  "steps": [
+    {
+      "id": 1,
+      "type": "trigger",
+      "app": "email",
+      "action": "new_email",
+      "config": {
+        "folder": "3PL Scopes",
+        "search_string": "subject:(3PL Scope OR Warehouse 3PL)"
+      }
+    },
+    {
+      "id": 2,
+      "type": "filter",
+      "condition": "Body contains 'Navia Freight 3PL Scope Document' OR Subject contains 'Scope Document Generator'"
+    },
+    {
+      "id": 3,
+      "type": "code",
+      "language": "javascript",
+      "code": "// See SCOPE_DOCUMENT_PARSER.md for full code",
+      "inputs": {
+        "emailBody": "{{step1.body}}"
+      },
+      "outputs": [
+        "projectTitle",
+        "customerName",
+        "systems",
+        "actionItemsCount",
+        "missingInfoCount",
+        "allTasks",
+        "missingInformation"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "action",
+      "app": "trello",
+      "action": "create_card",
+      "config": {
+        "board": "Navia 3PL Integrations",
+        "list": "Scope",
+        "name": "{{step3.projectTitle}}",
+        "desc": "Customer: {{step3.customerName}}\\nSystems: {{step3.systems}}\\n\\nTotal Tasks: {{step3.actionItemsCount}}\\nMissing Info: {{step3.missingInfoCount}}",
+        "labels": ["High Priority", "APS"],
+        "due": "30 days from now"
+      }
+    },
+    {
+      "id": 5,
+      "type": "loop",
+      "source": "{{step3.allTasks}}"
+    },
+    {
+      "id": 6,
+      "type": "action",
+      "app": "trello",
+      "action": "create_card",
+      "config": {
+        "board": "Navia 3PL Integrations",
+        "list": "{{loop.item.category}}",
+        "name": "{{loop.item.title}}",
+        "desc": "{{loop.item.description}}\\n\\nProject: {{step3.projectTitle}}\\nCustomer: {{step3.customerName}}\\nCategory: {{loop.item.category}}",
+        "labels": ["{{loop.item.priority}}", "{{loop.item.category}}", "APS"],
+        "due": "{{loop.item.dueInDays}} days from now",
+        "checklist": "Review requirements\\nAssign owner\\nImplement\\nTest\\nDocument"
+      }
+    },
+    {
+      "id": 7,
+      "type": "loop",
+      "source": "{{step3.missingInformation}}"
+    },
+    {
+      "id": 8,
+      "type": "action",
+      "app": "trello",
+      "action": "create_card",
+      "config": {
+        "board": "Navia 3PL Integrations",
+        "list": "Missing Info",
+        "name": "Gather: {{loop.item.item}}",
+        "desc": "Missing Information Required\\n\\nCategory: {{loop.item.category}}\\nPriority: {{loop.item.priority}}\\nProject: {{step3.projectTitle}}",
+        "labels": ["Missing", "{{loop.item.priority}}"],
+        "due": "7 days from now"
+      }
+    },
+    {
+      "id": 9,
+      "type": "action",
+      "app": "email",
+      "action": "send_email",
+      "config": {
+        "to": "{{step1.from}}",
+        "subject": "Tasks Created - {{step3.projectTitle}}",
+        "body": "Hi,\\n\\nYour 3PL scope document for {{step3.customerName}} has been processed.\\n\\n✅ Total tasks created: {{step3.actionItemsCount}}\\n❓ Missing information items: {{step3.missingInfoCount}}\\n\\nView your Trello board to see all tasks organized by category.\\n\\nBest regards,\\nNavia 3PL Automation"
+      }
+    }
+  ],
+  "metadata": {
+    "created": "2025-11-16",
+    "version": "1.0",
+    "requires": ["Zapier account", "Trello account", "Email access"]
+  }
+}
