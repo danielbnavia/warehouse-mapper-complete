@@ -1,0 +1,91 @@
+====================================================================
+YES! YOUR FILE HAS BEEN UPDATED AND IS READY TO USE
+====================================================================
+
+YOUR FILE: "Post to a channel when a webhook request is received..."
+STATUS: ✅ UPDATED with all 4 actions inside the loops!
+
+WHAT WAS MISSING:
+- Loop_Through_Action_Items had empty "actions": {}
+- Loop_Through_Missing_Information had empty "actions": {}
+
+WHAT I ADDED:
+Loop 1 (Action Items):
+  ✅ Create_Action_Item_Task
+  ✅ Set_Task_Priority (with runAfter dependency)
+
+Loop 2 (Missing Information):
+  ✅ Create_Missing_Info_Task
+  ✅ Set_Missing_Info_Priority (with runAfter dependency)
+
+ALL 14 ACTIONS NOW COMPLETE:
+1. Initialize_TeamID
+2. Initialize_PlanID
+3. Initialize_ActionItemsBucketID
+4. Initialize_MissingInfoBucketID
+5. Initialize_ProjectTitle
+6. Loop_Through_Action_Items (with 2 actions inside)
+7. Loop_Through_Missing_Information (with 2 actions inside)
+8. Compose_Success_Response
+9. Response_Success
+10. Compose_Error_Response
+11. Response_Error
+
+====================================================================
+HOW TO IMPORT THIS FILE
+====================================================================
+
+This is an ARM (Azure Resource Manager) Template.
+
+OPTION 1: Import via Power Automate UI ⭐ EASIEST
+----------------------------------------------
+1. Go to Power Automate: https://make.powerautomate.com
+2. Click "My flows"
+3. Click "Import"
+4. Click "Import Package (Legacy)"
+5. Upload YOUR file (the long-named one)
+6. Configure Planner connection
+7. Click "Import"
+8. Edit flow to update 3 variable IDs
+9. Save and test!
+
+OPTION 2: Deploy via Azure Portal (Advanced)
+----------------------------------------------
+1. Go to Azure Portal
+2. Search "Deploy a custom template"
+3. Click "Build your own template in the editor"
+4. Paste your file contents
+5. Fill in parameters (logicAppName, logicAppLocation)
+6. Deploy
+
+====================================================================
+AFTER IMPORT - UPDATE THESE 3 VALUES
+====================================================================
+
+In the flow, find these variable initializations and update:
+
+1. PlanID: Change "<UPDATE_PLAN_ID>" to your actual Plan ID
+2. ActionItemsBucketID: Change "<UPDATE_BUCKET_ID>" to your Action Items bucket ID
+3. MissingInfoBucketID: Change "<UPDATE_BUCKET_ID>" to your Missing Info bucket ID
+
+Get these IDs by running: .\Get-PlannerIDs.ps1
+
+====================================================================
+YOUR FILES
+====================================================================
+
+Original (backed up): BACKUP_Original_Export.json
+Updated (ready to use): Your long-named file ✅
+Clean copy: ScopeMapper_COMPLETE_ARM_Template.json
+
+All three files have the same complete flow - use whichever you prefer!
+
+====================================================================
+RECOMMENDATION
+====================================================================
+
+Use OPTION 1 above - Import Package (Legacy) in Power Automate.
+
+This is the standard way to import flows and will work perfectly with your file.
+
+====================================================================

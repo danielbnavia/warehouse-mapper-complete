@@ -1,0 +1,100 @@
+{
+  "NOTE": "CORRECTED for your actual loop names: 'Loop Through Action Items' and 'Loop Through Missing Information'",
+
+  "ACTION_1_Create_Action_Item_Task": {
+    "type": "OpenApiConnection",
+    "inputs": {
+      "host": {
+        "connectionName": "shared_planner",
+        "operationId": "CreateTask_V4",
+        "apiId": "/providers/Microsoft.PowerApps/apis/shared_planner"
+      },
+      "parameters": {
+        "groupId": "@variables('TeamID')",
+        "planId": "@variables('PlanID')",
+        "body/bucketId": "@variables('ActionItemsBucketID')",
+        "body/title": "@items('Loop Through Action Items')?['title']",
+        "body/assignments": {},
+        "body/percentComplete": 0,
+        "body/dueDateTime": "@addDays(utcNow(), items('Loop Through Action Items')?['dueInDays'])",
+        "body/details": {
+          "description": "@{items('Loop Through Action Items')?['description']}\n\nPriority: @{items('Loop Through Action Items')?['priority']}\nCategory: @{items('Loop Through Action Items')?['category']}\nProject: @{variables('ProjectTitle')}",
+          "previewType": "description"
+        }
+      },
+      "authentication": "@parameters('$authentication')"
+    }
+  },
+
+  "ACTION_2_Set_Task_Priority": {
+    "type": "OpenApiConnection",
+    "inputs": {
+      "host": {
+        "connectionName": "shared_planner",
+        "operationId": "UpdateTask_V3",
+        "apiId": "/providers/Microsoft.PowerApps/apis/shared_planner"
+      },
+      "parameters": {
+        "taskId": "@body('Create_Action_Item_Task')?['id']",
+        "body/priority": "@if(equals(items('Loop Through Action Items')?['priority'], 'high'), 1, if(equals(items('Loop Through Action Items')?['priority'], 'medium'), 5, 9))"
+      },
+      "authentication": "@parameters('$authentication')",
+      "headers": {
+        "If-Match": "@body('Create_Action_Item_Task')?['@odata.etag']"
+      }
+    },
+    "runAfter": {
+      "Create_Action_Item_Task": [
+        "Succeeded"
+      ]
+    }
+  },
+
+  "ACTION_3_Create_Missing_Info_Task": {
+    "type": "OpenApiConnection",
+    "inputs": {
+      "host": {
+        "connectionName": "shared_planner",
+        "operationId": "CreateTask_V4",
+        "apiId": "/providers/Microsoft.PowerApps/apis/shared_planner"
+      },
+      "parameters": {
+        "groupId": "@variables('TeamID')",
+        "planId": "@variables('PlanID')",
+        "body/bucketId": "@variables('MissingInfoBucketID')",
+        "body/title": "Gather: @{items('Loop Through Missing Information')?['item']}",
+        "body/assignments": {},
+        "body/percentComplete": 0,
+        "body/details": {
+          "description": "Missing Information Item\n\nCategory: @{items('Loop Through Missing Information')?['category']}\nPriority: @{items('Loop Through Missing Information')?['priority']}\nProject: @{variables('ProjectTitle')}",
+          "previewType": "description"
+        }
+      },
+      "authentication": "@parameters('$authentication')"
+    }
+  },
+
+  "ACTION_4_Set_Missing_Info_Priority": {
+    "type": "OpenApiConnection",
+    "inputs": {
+      "host": {
+        "connectionName": "shared_planner",
+        "operationId": "UpdateTask_V3",
+        "apiId": "/providers/Microsoft.PowerApps/apis/shared_planner"
+      },
+      "parameters": {
+        "taskId": "@body('Create_Missing_Info_Task')?['id']",
+        "body/priority": "@if(equals(items('Loop Through Missing Information')?['priority'], 'high'), 1, if(equals(items('Loop Through Missing Information')?['priority'], 'medium'), 5, 9))"
+      },
+      "authentication": "@parameters('$authentication')",
+      "headers": {
+        "If-Match": "@body('Create_Missing_Info_Task')?['@odata.etag']"
+      }
+    },
+    "runAfter": {
+      "Create_Missing_Info_Task": [
+        "Succeeded"
+      ]
+    }
+  }
+}

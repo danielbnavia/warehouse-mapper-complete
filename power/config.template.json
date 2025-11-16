@@ -1,0 +1,40 @@
+{
+  "_comment": "Configuration template for Scope Mapper Flow",
+  "_instructions": "Copy this file to config.local.json and fill in your values",
+  "flow": {
+    "name": "Scope Mapper – Create Planner Tasks from Webhook",
+    "version": "1.0.0",
+    "webhookUrl": "https://prod-XX.eastus.logic.azure.com:443/workflows/YOUR_WORKFLOW_ID/...",
+    "_webhookUrl_note": "Get this from Power Automate after importing the flow"
+  },
+  "planner": {
+    "teamId": "6cdbd2a2-7e69-492e-ad7e-a617ed1c6597",
+    "_teamId_note": "Microsoft Teams group ID - run Get-PlannerIDs.ps1 to get this",
+    "planId": "YOUR_PLAN_ID_HERE",
+    "_planId_note": "Planner plan ID - run Get-PlannerIDs.ps1 to get this",
+    "buckets": {
+      "actionItems": {
+        "name": "Action Items",
+        "id": "YOUR_ACTION_ITEMS_BUCKET_ID_HERE",
+        "_note": "Bucket for integration action items"
+      },
+      "missingInformation": {
+        "name": "Missing Information",
+        "id": "YOUR_MISSING_INFO_BUCKET_ID_HERE",
+        "_note": "Bucket for information gathering tasks"
+      }
+    }
+  },
+  "testing": {
+    "samplePayloadPath": "./sample_webhook_payload.json",
+    "testScriptPath": "./test_webhook.py",
+    "expectedTaskCount": {
+      "actionItems": 2,
+      "missingInformation": 2
+    }
+  },
+  "monitoring": {
+    "flowRunHistoryUrl": "https://make.powerautomate.com/environments/YOUR_ENV_ID/flows/YOUR_FLOW_ID/runs",
+    "plannerUrl": "https://tasks.office.com/YOUR_TENANT.onmicrosoft.com/Home/Planner/#/plantaskboard?groupId=YOUR_GROUP_ID&planId=YOUR_PLAN_ID"
+  }
+}

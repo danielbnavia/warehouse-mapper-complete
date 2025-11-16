@@ -1,0 +1,371 @@
+{
+    "name":  "20db2fc2-1b67-4c77-b0e4-2dd42e611538",
+    "id":  "/providers/Microsoft.Flow/flows/20db2fc2-1b67-4c77-b0e4-2dd42e611538",
+    "type":  "Microsoft.Flow/flows",
+    "properties":  {
+                       "apiId":  "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+                       "displayName":  "Post to a channel when a webhook request is received text\n1. Parse JSON\n   â””â”€ Content: triggerOutputs()?[\u0027body\u0027]\n   â””â”€ Schema: [Use the schema from the documentation file]\n\n2. Apply to each - Action Items\n   â””â”€ Input: body(\u0027Parse_JSON\u0027)?[\u0027actionItems\u0027]\n  ",
+                       "definition":  {
+                                          "metadata":  {
+                                                           "workflowEntityId":  null,
+                                                           "processAdvisorMetadata":  null,
+                                                           "flowChargedByPaygo":  null,
+                                                           "flowclientsuspensionreason":  "None",
+                                                           "flowclientsuspensiontime":  null,
+                                                           "flowclientsuspensionreasondetails":  null,
+                                                           "creator":  {
+                                                                           "id":  "29f13b9e-2e28-484e-ba5d-971bbbfd79ba",
+                                                                           "type":  "User",
+                                                                           "tenantId":  "2131d362-e12d-44c1-843b-a1413d6b96a3"
+                                                                       },
+                                                           "provisioningMethod":  "FromDefinition",
+                                                           "failureAlertSubscription":  true,
+                                                           "clientLastModifiedTime":  "2025-11-14T08:16:47.8564366Z",
+                                                           "connectionKeySavedTimeKey":  "2025-11-14T08:16:47.8564366Z",
+                                                           "creationSource":  "Portal",
+                                                           "modifiedSources":  "Portal;Teams"
+                                                       },
+                                          "$schema":  "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                                          "contentVersion":  "1.0.0.0",
+                                          "parameters":  {
+                                                             "$authentication":  {
+                                                                                     "defaultValue":  {
+
+                                                                                                      },
+                                                                                     "type":  "SecureObject"
+                                                                                 },
+                                                             "$connections":  {
+                                                                                  "defaultValue":  {
+
+                                                                                                   },
+                                                                                  "type":  "Object"
+                                                                              }
+                                                         },
+                                          "triggers":  {
+                                                           "manual":  {
+                                                                          "type":  "Request",
+                                                                          "kind":  "Http",
+                                                                          "inputs":  {
+                                                                                         "schema":  {
+                                                                                                        "type":  "object",
+                                                                                                        "properties":  {
+                                                                                                                           "timestamp":  {
+                                                                                                                                             "type":  "string"
+                                                                                                                                         },
+                                                                                                                           "scopeDocument":  {
+                                                                                                                                                 "type":  "object",
+                                                                                                                                                 "properties":  {
+                                                                                                                                                                    "title":  {
+                                                                                                                                                                                  "type":  "string"
+                                                                                                                                                                              },
+                                                                                                                                                                    "rawText":  {
+                                                                                                                                                                                    "type":  "string"
+                                                                                                                                                                                }
+                                                                                                                                                                }
+                                                                                                                                             },
+                                                                                                                           "analysis":  {
+                                                                                                                                            "type":  "object"
+                                                                                                                                        },
+                                                                                                                           "workflows":  {
+                                                                                                                                             "type":  "object"
+                                                                                                                                         },
+                                                                                                                           "actionItems":  {
+                                                                                                                                               "type":  "array"
+                                                                                                                                           },
+                                                                                                                           "metadata":  {
+                                                                                                                                            "type":  "object"
+                                                                                                                                        }
+                                                                                                                       }
+                                                                                                    }
+                                                                                     }
+                                                                      }
+                                                       },
+                                          "actions":  {
+                                                          "Initialize_TeamID":  {
+                                                                                    "type":  "InitializeVariable",
+                                                                                    "inputs":  {
+                                                                                                   "variables":  [
+                                                                                                                     {
+                                                                                                                         "name":  "TeamID",
+                                                                                                                         "type":  "String",
+                                                                                                                         "value":  "6cdbd2a2-7e69-492e-ad7e-a617ed1c6597"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                               }
+                                                                                },
+                                                          "Initialize_PlanID":  {
+                                                                                    "type":  "InitializeVariable",
+                                                                                    "inputs":  {
+                                                                                                   "variables":  [
+                                                                                                                     {
+                                                                                                                         "name":  "PlanID",
+                                                                                                                         "type":  "String",
+                                                                                                                         "value":  "\u003cUPDATE_PLAN_ID\u003e"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                               }
+                                                                                },
+                                                          "Initialize_ActionItemsBucketID":  {
+                                                                                                 "type":  "InitializeVariable",
+                                                                                                 "inputs":  {
+                                                                                                                "variables":  [
+                                                                                                                                  {
+                                                                                                                                      "name":  "ActionItemsBucketID",
+                                                                                                                                      "type":  "String",
+                                                                                                                                      "value":  "\u003cUPDATE_BUCKET_ID\u003e"
+                                                                                                                                  }
+                                                                                                                              ]
+                                                                                                            }
+                                                                                             },
+                                                          "Initialize_MissingInfoBucketID":  {
+                                                                                                 "type":  "InitializeVariable",
+                                                                                                 "inputs":  {
+                                                                                                                "variables":  [
+                                                                                                                                  {
+                                                                                                                                      "name":  "MissingInfoBucketID",
+                                                                                                                                      "type":  "String",
+                                                                                                                                      "value":  "\u003cUPDATE_BUCKET_ID\u003e"
+                                                                                                                                  }
+                                                                                                                              ]
+                                                                                                            }
+                                                                                             },
+                                                          "Initialize_ProjectTitle":  {
+                                                                                          "type":  "InitializeVariable",
+                                                                                          "inputs":  {
+                                                                                                         "variables":  [
+                                                                                                                           {
+                                                                                                                               "name":  "ProjectTitle",
+                                                                                                                               "type":  "String",
+                                                                                                                               "value":  "@{triggerBody()?[\u0027scopeDocument\u0027]?[\u0027title\u0027]}"
+                                                                                                                           }
+                                                                                                                       ]
+                                                                                                     },
+                                                                                          "runAfter":  {
+
+                                                                                                       }
+                                                                                      },
+                                                          "Loop_Through_Action_Items":  {
+                                                                                            "type":  "Foreach",
+                                                                                            "foreach":  "@triggerBody()?[\u0027actionItems\u0027]",
+                                                                                            "actions":  {
+                                                                                                            "Create_Action_Item_Task":  {
+                                                                                                                                            "type":  "ApiConnection",
+                                                                                                                                            "inputs":  {
+                                                                                                                                                           "host":  {
+                                                                                                                                                                        "connection":  {
+                                                                                                                                                                                           "name":  "@parameters(\u0027$connections\u0027)[\u0027planner\u0027][\u0027connectionId\u0027]"
+                                                                                                                                                                                       }
+                                                                                                                                                                    },
+                                                                                                                                                           "method":  "post",
+                                                                                                                                                           "path":  "/v1.0/planner/tasks",
+                                                                                                                                                           "body":  {
+                                                                                                                                                                        "planId":  "@variables(\u0027PlanID\u0027)",
+                                                                                                                                                                        "bucketId":  "@variables(\u0027ActionItemsBucketID\u0027)",
+                                                                                                                                                                        "title":  "@{items(\u0027Loop_Through_Action_Items\u0027)?[\u0027title\u0027]}",
+                                                                                                                                                                        "assignments":  {
+
+                                                                                                                                                                                        },
+                                                                                                                                                                        "percentComplete":  0,
+                                                                                                                                                                        "dueDateTime":  "@{addDays(utcNow(), items(\u0027Loop_Through_Action_Items\u0027)?[\u0027dueInDays\u0027])}",
+                                                                                                                                                                        "details":  {
+                                                                                                                                                                                        "description":  "@{items(\u0027Loop_Through_Action_Items\u0027)?[\u0027description\u0027]}\n\nPriority: @{items(\u0027Loop_Through_Action_Items\u0027)?[\u0027priority\u0027]}\nCategory: @{items(\u0027Loop_Through_Action_Items\u0027)?[\u0027category\u0027]}\nProject: @{variables(\u0027ProjectTitle\u0027)}",
+                                                                                                                                                                                        "previewType":  "description"
+                                                                                                                                                                                    }
+                                                                                                                                                                    }
+                                                                                                                                                       }
+                                                                                                                                        },
+                                                                                                            "Set_Task_Priority":  {
+                                                                                                                                      "type":  "ApiConnection",
+                                                                                                                                      "inputs":  {
+                                                                                                                                                     "host":  {
+                                                                                                                                                                  "connection":  {
+                                                                                                                                                                                     "name":  "@parameters(\u0027$connections\u0027)[\u0027planner\u0027][\u0027connectionId\u0027]"
+                                                                                                                                                                                 }
+                                                                                                                                                              },
+                                                                                                                                                     "method":  "patch",
+                                                                                                                                                     "path":  "/v1.0/planner/tasks/@{encodeURIComponent(body(\u0027Create_Action_Item_Task\u0027)?[\u0027id\u0027])}",
+                                                                                                                                                     "body":  {
+                                                                                                                                                                  "priority":  "@{if(equals(items(\u0027Loop_Through_Action_Items\u0027)?[\u0027priority\u0027], \u0027high\u0027), 1, if(equals(items(\u0027Loop_Through_Action_Items\u0027)?[\u0027priority\u0027], \u0027medium\u0027), 5, 9))}"
+                                                                                                                                                              },
+                                                                                                                                                     "headers":  {
+                                                                                                                                                                     "If-Match":  "@body(\u0027Create_Action_Item_Task\u0027)?[\u0027@odata.etag\u0027]"
+                                                                                                                                                                 }
+                                                                                                                                                 },
+                                                                                                                                      "runAfter":  {
+                                                                                                                                                       "Create_Action_Item_Task":  [
+                                                                                                                                                                                       "Succeeded"
+                                                                                                                                                                                   ]
+                                                                                                                                                   }
+                                                                                                                                  }
+                                                                                                        },
+                                                                                            "runAfter":  {
+                                                                                                             "Initialize_ProjectTitle":  [
+                                                                                                                                             "Succeeded"
+                                                                                                                                         ],
+                                                                                                             "Initialize_TeamID":  [
+                                                                                                                                       "Succeeded"
+                                                                                                                                   ],
+                                                                                                             "Initialize_PlanID":  [
+                                                                                                                                       "Succeeded"
+                                                                                                                                   ],
+                                                                                                             "Initialize_ActionItemsBucketID":  [
+                                                                                                                                                    "Succeeded"
+                                                                                                                                                ],
+                                                                                                             "Initialize_MissingInfoBucketID":  [
+                                                                                                                                                    "Succeeded"
+                                                                                                                                                ]
+                                                                                                         }
+                                                                                        },
+                                                          "Loop_Through_Missing_Information":  {
+                                                                                                   "type":  "Foreach",
+                                                                                                   "foreach":  "@triggerBody()?[\u0027analysis\u0027]?[\u0027missingInformation\u0027]",
+                                                                                                   "actions":  {
+                                                                                                                   "Create_Missing_Info_Task":  {
+                                                                                                                                                    "type":  "ApiConnection",
+                                                                                                                                                    "inputs":  {
+                                                                                                                                                                   "host":  {
+                                                                                                                                                                                "connection":  {
+                                                                                                                                                                                                   "name":  "@parameters(\u0027$connections\u0027)[\u0027planner\u0027][\u0027connectionId\u0027]"
+                                                                                                                                                                                               }
+                                                                                                                                                                            },
+                                                                                                                                                                   "method":  "post",
+                                                                                                                                                                   "path":  "/v1.0/planner/tasks",
+                                                                                                                                                                   "body":  {
+                                                                                                                                                                                "planId":  "@variables(\u0027PlanID\u0027)",
+                                                                                                                                                                                "bucketId":  "@variables(\u0027MissingInfoBucketID\u0027)",
+                                                                                                                                                                                "title":  "Gather: @{items(\u0027Loop_Through_Missing_Information\u0027)?[\u0027item\u0027]}",
+                                                                                                                                                                                "assignments":  {
+
+                                                                                                                                                                                                },
+                                                                                                                                                                                "percentComplete":  0,
+                                                                                                                                                                                "details":  {
+                                                                                                                                                                                                "description":  "Missing Information Item\n\nCategory: @{items(\u0027Loop_Through_Missing_Information\u0027)?[\u0027category\u0027]}\nPriority: @{items(\u0027Loop_Through_Missing_Information\u0027)?[\u0027priority\u0027]}\nProject: @{variables(\u0027ProjectTitle\u0027)}",
+                                                                                                                                                                                                "previewType":  "description"
+                                                                                                                                                                                            }
+                                                                                                                                                                            }
+                                                                                                                                                               }
+                                                                                                                                                },
+                                                                                                                   "Set_Missing_Info_Priority":  {
+                                                                                                                                                     "type":  "ApiConnection",
+                                                                                                                                                     "inputs":  {
+                                                                                                                                                                    "host":  {
+                                                                                                                                                                                 "connection":  {
+                                                                                                                                                                                                    "name":  "@parameters(\u0027$connections\u0027)[\u0027planner\u0027][\u0027connectionId\u0027]"
+                                                                                                                                                                                                }
+                                                                                                                                                                             },
+                                                                                                                                                                    "method":  "patch",
+                                                                                                                                                                    "path":  "/v1.0/planner/tasks/@{encodeURIComponent(body(\u0027Create_Missing_Info_Task\u0027)?[\u0027id\u0027])}",
+                                                                                                                                                                    "body":  {
+                                                                                                                                                                                 "priority":  "@{if(equals(items(\u0027Loop_Through_Missing_Information\u0027)?[\u0027priority\u0027], \u0027high\u0027), 1, if(equals(items(\u0027Loop_Through_Missing_Information\u0027)?[\u0027priority\u0027], \u0027medium\u0027), 5, 9))}"
+                                                                                                                                                                             },
+                                                                                                                                                                    "headers":  {
+                                                                                                                                                                                    "If-Match":  "@body(\u0027Create_Missing_Info_Task\u0027)?[\u0027@odata.etag\u0027]"
+                                                                                                                                                                                }
+                                                                                                                                                                },
+                                                                                                                                                     "runAfter":  {
+                                                                                                                                                                      "Create_Missing_Info_Task":  [
+                                                                                                                                                                                                       "Succeeded"
+                                                                                                                                                                                                   ]
+                                                                                                                                                                  }
+                                                                                                                                                 }
+                                                                                                               },
+                                                                                                   "runAfter":  {
+                                                                                                                    "Loop_Through_Action_Items":  [
+                                                                                                                                                      "Succeeded"
+                                                                                                                                                  ]
+                                                                                                                }
+                                                                                               },
+                                                          "Compose_Success_Response":  {
+                                                                                           "type":  "Compose",
+                                                                                           "inputs":  {
+                                                                                                          "status":  "success",
+                                                                                                          "message":  "Tasks created successfully",
+                                                                                                          "projectTitle":  "@variables(\u0027ProjectTitle\u0027)",
+                                                                                                          "tasksCreated":  {
+                                                                                                                               "actionItems":  "@length(triggerBody()?[\u0027actionItems\u0027])",
+                                                                                                                               "missingInformation":  "@length(triggerBody()?[\u0027analysis\u0027]?[\u0027missingInformation\u0027])"
+                                                                                                                           },
+                                                                                                          "timestamp":  "@utcNow()"
+                                                                                                      },
+                                                                                           "runAfter":  {
+                                                                                                            "Loop_Through_Missing_Information":  [
+                                                                                                                                                     "Succeeded"
+                                                                                                                                                 ]
+                                                                                                        }
+                                                                                       },
+                                                          "Response_Success":  {
+                                                                                   "type":  "Response",
+                                                                                   "inputs":  {
+                                                                                                  "statusCode":  200,
+                                                                                                  "body":  "@outputs(\u0027Compose_Success_Response\u0027)",
+                                                                                                  "headers":  {
+                                                                                                                  "Content-Type":  "application/json"
+                                                                                                              }
+                                                                                              },
+                                                                                   "runAfter":  {
+                                                                                                    "Compose_Success_Response":  [
+                                                                                                                                     "Succeeded"
+                                                                                                                                 ]
+                                                                                                }
+                                                                               },
+                                                          "Compose_Error_Response":  {
+                                                                                         "type":  "Compose",
+                                                                                         "inputs":  {
+                                                                                                        "status":  "error",
+                                                                                                        "message":  "Failed to create tasks",
+                                                                                                        "error":  "@{result(\u0027Loop_Through_Action_Items\u0027)}@{result(\u0027Loop_Through_Missing_Information\u0027)}",
+                                                                                                        "timestamp":  "@utcNow()"
+                                                                                                    },
+                                                                                         "runAfter":  {
+                                                                                                          "Loop_Through_Action_Items":  [
+                                                                                                                                            "Failed",
+                                                                                                                                            "TimedOut"
+                                                                                                                                        ],
+                                                                                                          "Loop_Through_Missing_Information":  [
+                                                                                                                                                   "Failed",
+                                                                                                                                                   "TimedOut"
+                                                                                                                                               ]
+                                                                                                      }
+                                                                                     },
+                                                          "Response_Error":  {
+                                                                                 "type":  "Response",
+                                                                                 "inputs":  {
+                                                                                                "statusCode":  500,
+                                                                                                "body":  "@outputs(\u0027Compose_Error_Response\u0027)",
+                                                                                                "headers":  {
+                                                                                                                "Content-Type":  "application/json"
+                                                                                                            }
+                                                                                            },
+                                                                                 "runAfter":  {
+                                                                                                  "Compose_Error_Response":  [
+                                                                                                                                 "Succeeded"
+                                                                                                                             ]
+                                                                                              }
+                                                                             }
+                                                      },
+                                          "outputs":  {
+
+                                                      }
+                                      },
+                       "connectionReferences":  {
+                                                    "shared_planner":  {
+                                                                           "connectionName":  "shared-planner-e84258e0-5be8-4c12-a1bc-ffbc65fff73d",
+                                                                           "source":  "Embedded",
+                                                                           "id":  "/providers/Microsoft.PowerApps/apis/shared_planner",
+                                                                           "tier":  "NotSpecified",
+                                                                           "apiName":  "planner",
+                                                                           "isProcessSimpleApiReferenceConversionAlreadyDone":  false
+                                                                       },
+                                                    "shared_teams":  {
+                                                                         "connectionName":  "shared-teams-6d532f50-ce22-4d8d-b047-89253c30bb92",
+                                                                         "source":  "Embedded",
+                                                                         "id":  "/providers/Microsoft.PowerApps/apis/shared_teams",
+                                                                         "tier":  "NotSpecified",
+                                                                         "apiName":  "teams",
+                                                                         "isProcessSimpleApiReferenceConversionAlreadyDone":  false
+                                                                     }
+                                                },
+                       "flowFailureAlertSubscribed":  false,
+                       "isManaged":  false
+                   }
+}

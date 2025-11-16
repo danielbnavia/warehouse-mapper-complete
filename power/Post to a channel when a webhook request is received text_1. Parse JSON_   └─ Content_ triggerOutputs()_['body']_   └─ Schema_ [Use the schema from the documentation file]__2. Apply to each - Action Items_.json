@@ -1,0 +1,338 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "logicAppName": {
+      "type": "String",
+      "metadata": {
+        "description": "Name of the logic app."
+      }
+    },
+    "logicAppLocation": {
+      "defaultValue": "[resourceGroup().location]",
+      "type": "String",
+      "metadata": {
+        "description": "Location of the logic app."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2016-06-01",
+      "name": "[parameters('logicAppName')]",
+      "location": "[parameters('logicAppLocation')]",
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "manual": {
+              "type": "Request",
+              "kind": "Http",
+              "inputs": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "scopeDocument": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "rawText": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "analysis": {
+                      "type": "object"
+                    },
+                    "workflows": {
+                      "type": "object"
+                    },
+                    "actionItems": {
+                      "type": "array"
+                    },
+                    "metadata": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "actions": {
+            "Initialize_TeamID": {
+              "runAfter": {},
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "TeamID",
+                    "type": "string",
+                    "value": "6cdbd2a2-7e69-492e-ad7e-a617ed1c6597"
+                  }
+                ]
+              }
+            },
+            "Initialize_PlanID": {
+              "runAfter": {},
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "PlanID",
+                    "type": "string",
+                    "value": "<UPDATE_PLAN_ID>"
+                  }
+                ]
+              }
+            },
+            "Initialize_ActionItemsBucketID": {
+              "runAfter": {},
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "ActionItemsBucketID",
+                    "type": "string",
+                    "value": "<UPDATE_BUCKET_ID>"
+                  }
+                ]
+              }
+            },
+            "Initialize_MissingInfoBucketID": {
+              "runAfter": {},
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "MissingInfoBucketID",
+                    "type": "string",
+                    "value": "<UPDATE_BUCKET_ID>"
+                  }
+                ]
+              }
+            },
+            "Initialize_ProjectTitle": {
+              "runAfter": {},
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "ProjectTitle",
+                    "type": "string",
+                    "value": "@{triggerBody()?['scopeDocument']?['title']}"
+                  }
+                ]
+              }
+            },
+            "Loop_Through_Action_Items": {
+              "foreach": "@triggerBody()?['actionItems']",
+              "actions": {
+                "Create_Action_Item_Task": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_planner",
+                      "operationId": "CreateTask_V4",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_planner"
+                    },
+                    "parameters": {
+                      "groupId": "@variables('TeamID')",
+                      "planId": "@variables('PlanID')",
+                      "body/bucketId": "@variables('ActionItemsBucketID')",
+                      "body/title": "@items('Loop_Through_Action_Items')?['title']",
+                      "body/assignments": {},
+                      "body/percentComplete": 0,
+                      "body/dueDateTime": "@addDays(utcNow(), items('Loop_Through_Action_Items')?['dueInDays'])",
+                      "body/details": {
+                        "description": "@{items('Loop_Through_Action_Items')?['description']}\n\nPriority: @{items('Loop_Through_Action_Items')?['priority']}\nCategory: @{items('Loop_Through_Action_Items')?['category']}\nProject: @{variables('ProjectTitle')}",
+                        "previewType": "description"
+                      }
+                    }
+                  }
+                },
+                "Set_Task_Priority": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_planner",
+                      "operationId": "UpdateTask_V3",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_planner"
+                    },
+                    "parameters": {
+                      "taskId": "@body('Create_Action_Item_Task')?['id']",
+                      "body/priority": "@if(equals(items('Loop_Through_Action_Items')?['priority'], 'high'), 1, if(equals(items('Loop_Through_Action_Items')?['priority'], 'medium'), 5, 9))"
+                    },
+                    "headers": {
+                      "If-Match": "@body('Create_Action_Item_Task')?['@odata.etag']"
+                    }
+                  },
+                  "runAfter": {
+                    "Create_Action_Item_Task": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "runAfter": {
+                "Initialize_ProjectTitle": [
+                  "Succeeded"
+                ],
+                "Initialize_TeamID": [
+                  "Succeeded"
+                ],
+                "Initialize_PlanID": [
+                  "Succeeded"
+                ],
+                "Initialize_ActionItemsBucketID": [
+                  "Succeeded"
+                ],
+                "Initialize_MissingInfoBucketID": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Foreach"
+            },
+            "Loop_Through_Missing_Information": {
+              "foreach": "@triggerBody()?['analysis']?['missingInformation']",
+              "actions": {
+                "Create_Missing_Info_Task": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_planner",
+                      "operationId": "CreateTask_V4",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_planner"
+                    },
+                    "parameters": {
+                      "groupId": "@variables('TeamID')",
+                      "planId": "@variables('PlanID')",
+                      "body/bucketId": "@variables('MissingInfoBucketID')",
+                      "body/title": "Gather: @{items('Loop_Through_Missing_Information')?['item']}",
+                      "body/assignments": {},
+                      "body/percentComplete": 0,
+                      "body/details": {
+                        "description": "Missing Information Item\n\nCategory: @{items('Loop_Through_Missing_Information')?['category']}\nPriority: @{items('Loop_Through_Missing_Information')?['priority']}\nProject: @{variables('ProjectTitle')}",
+                        "previewType": "description"
+                      }
+                    }
+                  }
+                },
+                "Set_Missing_Info_Priority": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_planner",
+                      "operationId": "UpdateTask_V3",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_planner"
+                    },
+                    "parameters": {
+                      "taskId": "@body('Create_Missing_Info_Task')?['id']",
+                      "body/priority": "@if(equals(items('Loop_Through_Missing_Information')?['priority'], 'high'), 1, if(equals(items('Loop_Through_Missing_Information')?['priority'], 'medium'), 5, 9))"
+                    },
+                    "headers": {
+                      "If-Match": "@body('Create_Missing_Info_Task')?['@odata.etag']"
+                    }
+                  },
+                  "runAfter": {
+                    "Create_Missing_Info_Task": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "runAfter": {
+                "Loop_Through_Action_Items": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Foreach"
+            },
+            "Compose_Success_Response": {
+              "runAfter": {
+                "Loop_Through_Missing_Information": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": {
+                "status": "success",
+                "message": "Tasks created successfully",
+                "projectTitle": "@variables('ProjectTitle')",
+                "tasksCreated": {
+                  "actionItems": "@length(triggerBody()?['actionItems'])",
+                  "missingInformation": "@length(triggerBody()?['analysis']?['missingInformation'])"
+                },
+                "timestamp": "@utcNow()"
+              }
+            },
+            "Response_Success": {
+              "runAfter": {
+                "Compose_Success_Response": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Response",
+              "inputs": {
+                "statusCode": 200,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "body": "@outputs('Compose_Success_Response')"
+              }
+            },
+            "Compose_Error_Response": {
+              "runAfter": {
+                "Loop_Through_Action_Items": [
+                  "Failed",
+                  "TimedOut"
+                ],
+                "Loop_Through_Missing_Information": [
+                  "Failed",
+                  "TimedOut"
+                ]
+              },
+              "type": "Compose",
+              "inputs": {
+                "status": "error",
+                "message": "Failed to create tasks",
+                "error": "@{result('Loop_Through_Action_Items')}@{result('Loop_Through_Missing_Information')}",
+                "timestamp": "@utcNow()"
+              }
+            },
+            "Response_Error": {
+              "runAfter": {
+                "Compose_Error_Response": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Response",
+              "inputs": {
+                "statusCode": 500,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "body": "@outputs('Compose_Error_Response')"
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {}
+      }
+    }
+  ]
+}

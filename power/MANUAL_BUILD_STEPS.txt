@@ -1,0 +1,124 @@
+==================================================================
+SCOPE MAPPER FLOW - MANUAL BUILD STEPS
+==================================================================
+
+Your Flow ID: 20db2fc2-1b67-4c77-b0e4-2dd42e611538
+
+==================================================================
+STEP 1: EDIT YOUR FLOW
+==================================================================
+1. Open: https://make.powerautomate.com
+2. Find your flow: "20db2fc2-1b67-4c77-b0e4-2dd42e611538"
+3. Click "Edit"
+
+==================================================================
+STEP 2: ENSURE TRIGGER IS SET
+==================================================================
+Trigger should be: "When a HTTP request is received"
+- Click trigger to add JSON schema (paste from sample_webhook_payload.json)
+
+==================================================================
+STEP 3: ADD 5 VARIABLES (Click "+ New step" after trigger)
+==================================================================
+
+Variable 1:
+- Action: "Initialize variable"
+- Name: TeamID
+- Type: String
+- Value: 6cdbd2a2-7e69-492e-ad7e-a617ed1c6597
+
+Variable 2:
+- Action: "Initialize variable"
+- Name: PlanID
+- Type: String
+- Value: [GET FROM Get-PlannerIDs.ps1]
+
+Variable 3:
+- Action: "Initialize variable"
+- Name: ActionItemsBucketID
+- Type: String
+- Value: [GET FROM Get-PlannerIDs.ps1]
+
+Variable 4:
+- Action: "Initialize variable"
+- Name: MissingInfoBucketID
+- Type: String
+- Value: [GET FROM Get-PlannerIDs.ps1]
+
+Variable 5:
+- Action: "Initialize variable"
+- Name: ProjectTitle
+- Type: String
+- Value: triggerBody()?['scopeDocument']?['title']
+
+==================================================================
+STEP 4: ADD "APPLY TO EACH" FOR ACTION ITEMS
+==================================================================
+- Click "+ New step"
+- Search: "Apply to each"
+- Select from: triggerBody()?['actionItems']
+
+INSIDE THIS LOOP, ADD 2 ACTIONS:
+
+Action A: Create a task (Planner)
+  - Group ID: variables('TeamID')
+  - Plan ID: variables('PlanID')
+  - Bucket ID: variables('ActionItemsBucketID')
+  - Title: items('Apply_to_each')?['title']
+  - Due Date: addDays(utcNow(), items('Apply_to_each')?['dueInDays'])
+
+Action B: Update task details (Planner)
+  - Task ID: From previous step
+  - Priority:
+    if(equals(items('Apply_to_each')?['priority'], 'high'), 1,
+       if(equals(items('Apply_to_each')?['priority'], 'medium'), 5, 9))
+
+==================================================================
+STEP 5: ADD "APPLY TO EACH" FOR MISSING INFORMATION
+==================================================================
+- Click "+ New step" (AFTER the action items loop)
+- Search: "Apply to each"
+- Select from: triggerBody()?['analysis']?['missingInformation']
+
+INSIDE THIS LOOP, ADD 2 ACTIONS:
+
+Action A: Create a task (Planner)
+  - Group ID: variables('TeamID')
+  - Plan ID: variables('PlanID')
+  - Bucket ID: variables('MissingInfoBucketID')
+  - Title: concat('Gather: ', items('Apply_to_each_2')?['item'])
+
+Action B: Update task details (Planner)
+  - Task ID: From previous step
+  - Priority:
+    if(equals(items('Apply_to_each_2')?['priority'], 'high'), 1,
+       if(equals(items('Apply_to_each_2')?['priority'], 'medium'), 5, 9))
+
+==================================================================
+STEP 6: ADD SUCCESS RESPONSE
+==================================================================
+- Click "+ New step" (after both loops)
+- Search: "Response"
+- Status Code: 200
+- Body:
+{
+  "status": "success",
+  "message": "Tasks created successfully",
+  "projectTitle": "@{variables('ProjectTitle')}",
+  "tasksCreated": {
+    "actionItems": "@{length(triggerBody()?['actionItems'])}",
+    "missingInformation": "@{length(triggerBody()?['analysis']?['missingInformation'])}"
+  },
+  "timestamp": "@{utcNow()}"
+}
+
+==================================================================
+STEP 7: SAVE AND TEST
+==================================================================
+1. Click "Save" (top right)
+2. Copy the HTTP POST URL from the trigger
+3. Test with: .\Test-Webhook.ps1 "YOUR_WEBHOOK_URL"
+
+==================================================================
+DONE!
+==================================================================

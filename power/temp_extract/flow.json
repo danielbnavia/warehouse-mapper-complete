@@ -1,0 +1,322 @@
+{
+    "name": "Scope Mapper \u2013 Create Planner Tasks from Webhook",
+    "properties": {
+        "definition": {
+            "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+            "contentVersion": "1.0.0.0",
+            "parameters": {
+                "$connections": {
+                    "defaultValue": {},
+                    "type": "Object"
+                }
+            },
+            "actions": {
+                "Initialize_TeamID": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "TeamID",
+                                "type": "String",
+                                "value": "6cdbd2a2-7e69-492e-ad7e-a617ed1c6597"
+                            }
+                        ]
+                    }
+                },
+                "Initialize_PlanID": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "PlanID",
+                                "type": "String",
+                                "value": "<UPDATE_PLAN_ID>"
+                            }
+                        ]
+                    }
+                },
+                "Initialize_ActionItemsBucketID": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "ActionItemsBucketID",
+                                "type": "String",
+                                "value": "<UPDATE_BUCKET_ID>"
+                            }
+                        ]
+                    }
+                },
+                "Initialize_MissingInfoBucketID": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "MissingInfoBucketID",
+                                "type": "String",
+                                "value": "<UPDATE_BUCKET_ID>"
+                            }
+                        ]
+                    }
+                },
+                "Initialize_ProjectTitle": {
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "ProjectTitle",
+                                "type": "String",
+                                "value": "@{triggerBody()?['scopeDocument']?['title']}"
+                            }
+                        ]
+                    },
+                    "runAfter": {}
+                },
+                "Loop_Through_Action_Items": {
+                    "type": "Foreach",
+                    "foreach": "@triggerBody()?['actionItems']",
+                    "actions": {
+                        "Create_Action_Item_Task": {
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['planner']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v1.0/planner/tasks",
+                                "body": {
+                                    "planId": "@variables('PlanID')",
+                                    "bucketId": "@variables('ActionItemsBucketID')",
+                                    "title": "@{items('Loop_Through_Action_Items')?['title']}",
+                                    "assignments": {},
+                                    "percentComplete": 0,
+                                    "dueDateTime": "@{addDays(utcNow(), items('Loop_Through_Action_Items')?['dueInDays'])}",
+                                    "details": {
+                                        "description": "@{items('Loop_Through_Action_Items')?['description']}\n\nPriority: @{items('Loop_Through_Action_Items')?['priority']}\nCategory: @{items('Loop_Through_Action_Items')?['category']}\nProject: @{variables('ProjectTitle')}",
+                                        "previewType": "description"
+                                    }
+                                }
+                            }
+                        },
+                        "Set_Task_Priority": {
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['planner']['connectionId']"
+                                    }
+                                },
+                                "method": "patch",
+                                "path": "/v1.0/planner/tasks/@{encodeURIComponent(body('Create_Action_Item_Task')?['id'])}",
+                                "body": {
+                                    "priority": "@{if(equals(items('Loop_Through_Action_Items')?['priority'], 'high'), 1, if(equals(items('Loop_Through_Action_Items')?['priority'], 'medium'), 5, 9))}"
+                                },
+                                "headers": {
+                                    "If-Match": "@body('Create_Action_Item_Task')?['@odata.etag']"
+                                }
+                            },
+                            "runAfter": {
+                                "Create_Action_Item_Task": [
+                                    "Succeeded"
+                                ]
+                            }
+                        }
+                    },
+                    "runAfter": {
+                        "Initialize_ProjectTitle": [
+                            "Succeeded"
+                        ],
+                        "Initialize_TeamID": [
+                            "Succeeded"
+                        ],
+                        "Initialize_PlanID": [
+                            "Succeeded"
+                        ],
+                        "Initialize_ActionItemsBucketID": [
+                            "Succeeded"
+                        ],
+                        "Initialize_MissingInfoBucketID": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Loop_Through_Missing_Information": {
+                    "type": "Foreach",
+                    "foreach": "@triggerBody()?['analysis']?['missingInformation']",
+                    "actions": {
+                        "Create_Missing_Info_Task": {
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['planner']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v1.0/planner/tasks",
+                                "body": {
+                                    "planId": "@variables('PlanID')",
+                                    "bucketId": "@variables('MissingInfoBucketID')",
+                                    "title": "Gather: @{items('Loop_Through_Missing_Information')?['item']}",
+                                    "assignments": {},
+                                    "percentComplete": 0,
+                                    "details": {
+                                        "description": "Missing Information Item\n\nCategory: @{items('Loop_Through_Missing_Information')?['category']}\nPriority: @{items('Loop_Through_Missing_Information')?['priority']}\nProject: @{variables('ProjectTitle')}",
+                                        "previewType": "description"
+                                    }
+                                }
+                            }
+                        },
+                        "Set_Missing_Info_Priority": {
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['planner']['connectionId']"
+                                    }
+                                },
+                                "method": "patch",
+                                "path": "/v1.0/planner/tasks/@{encodeURIComponent(body('Create_Missing_Info_Task')?['id'])}",
+                                "body": {
+                                    "priority": "@{if(equals(items('Loop_Through_Missing_Information')?['priority'], 'high'), 1, if(equals(items('Loop_Through_Missing_Information')?['priority'], 'medium'), 5, 9))}"
+                                },
+                                "headers": {
+                                    "If-Match": "@body('Create_Missing_Info_Task')?['@odata.etag']"
+                                }
+                            },
+                            "runAfter": {
+                                "Create_Missing_Info_Task": [
+                                    "Succeeded"
+                                ]
+                            }
+                        }
+                    },
+                    "runAfter": {
+                        "Loop_Through_Action_Items": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Compose_Success_Response": {
+                    "type": "Compose",
+                    "inputs": {
+                        "status": "success",
+                        "message": "Tasks created successfully",
+                        "projectTitle": "@variables('ProjectTitle')",
+                        "tasksCreated": {
+                            "actionItems": "@length(triggerBody()?['actionItems'])",
+                            "missingInformation": "@length(triggerBody()?['analysis']?['missingInformation'])"
+                        },
+                        "timestamp": "@utcNow()"
+                    },
+                    "runAfter": {
+                        "Loop_Through_Missing_Information": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Response_Success": {
+                    "type": "Response",
+                    "inputs": {
+                        "statusCode": 200,
+                        "body": "@outputs('Compose_Success_Response')",
+                        "headers": {
+                            "Content-Type": "application/json"
+                        }
+                    },
+                    "runAfter": {
+                        "Compose_Success_Response": [
+                            "Succeeded"
+                        ]
+                    }
+                },
+                "Compose_Error_Response": {
+                    "type": "Compose",
+                    "inputs": {
+                        "status": "error",
+                        "message": "Failed to create tasks",
+                        "error": "@{result('Loop_Through_Action_Items')}@{result('Loop_Through_Missing_Information')}",
+                        "timestamp": "@utcNow()"
+                    },
+                    "runAfter": {
+                        "Loop_Through_Action_Items": [
+                            "Failed",
+                            "TimedOut"
+                        ],
+                        "Loop_Through_Missing_Information": [
+                            "Failed",
+                            "TimedOut"
+                        ]
+                    }
+                },
+                "Response_Error": {
+                    "type": "Response",
+                    "inputs": {
+                        "statusCode": 500,
+                        "body": "@outputs('Compose_Error_Response')",
+                        "headers": {
+                            "Content-Type": "application/json"
+                        }
+                    },
+                    "runAfter": {
+                        "Compose_Error_Response": [
+                            "Succeeded"
+                        ]
+                    }
+                }
+            },
+            "triggers": {
+                "manual": {
+                    "type": "Request",
+                    "kind": "Http",
+                    "inputs": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "timestamp": {
+                                    "type": "string"
+                                },
+                                "scopeDocument": {
+                                    "type": "object",
+                                    "properties": {
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "rawText": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "analysis": {
+                                    "type": "object"
+                                },
+                                "workflows": {
+                                    "type": "object"
+                                },
+                                "actionItems": {
+                                    "type": "array"
+                                },
+                                "metadata": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "$connections": {
+                "value": {
+                    "planner": {
+                        "connectionId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/connections/planner",
+                        "connectionName": "planner",
+                        "id": "/subscriptions/{subscriptionId}/providers/Microsoft.Web/locations/{location}/managedApis/planner"
+                    }
+                }
+            }
+        }
+    }
+}

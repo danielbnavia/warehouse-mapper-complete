@@ -1,0 +1,99 @@
+====================================================================
+HOW TO PASTE JSON CODE INTO POWER AUTOMATE ACTIONS
+====================================================================
+
+YES! You can paste JSON to configure all fields at once!
+
+METHOD 1: PASTE INTO INDIVIDUAL ACTIONS (Easiest)
+====================================================================
+
+For EACH action you added:
+
+1. Click on the action (e.g., "Create Action Item Task")
+2. Click the "..." menu (three dots) in the top right of the action
+3. Select "Peek code"
+4. You'll see a code view panel appear
+5. DELETE everything in that panel
+6. COPY the JSON for that action from ACTION_JSON_SNIPPETS.json
+7. PASTE it into the code view panel
+8. Click "Done" or close the panel
+9. The action fields will auto-populate!
+
+Repeat for all 4 actions.
+
+====================================================================
+WHICH JSON TO USE FOR EACH ACTION
+====================================================================
+
+Action 1: "Create Action Item Task"
+→ Copy: ACTION_1_Create_Action_Item_Task
+
+Action 2: "Set Task Priority"
+→ Copy: ACTION_2_Set_Task_Priority
+
+Action 3: "Create Missing Info Task"
+→ Copy: ACTION_3_Create_Missing_Info_Task
+
+Action 4: "Set Missing Info Priority"
+→ Copy: ACTION_4_Set_Missing_Info_Priority
+
+====================================================================
+METHOD 2: PASTE ENTIRE FLOW JSON (Advanced)
+====================================================================
+
+If you want to paste the ENTIRE flow definition:
+
+1. Click anywhere OUTSIDE the actions (on the canvas)
+2. Click "Peek code" from the flow menu
+3. You'll see the ENTIRE flow JSON
+4. Find the "actions" section
+5. Replace your loop actions with the ones from the package
+
+(This is more complex - Method 1 is easier!)
+
+====================================================================
+IMPORTANT NOTES
+====================================================================
+
+- The JSON in ACTION_JSON_SNIPPETS.json uses these loop names:
+  • "Apply_to_each" (for Action Items)
+  • "Apply_to_each_2" (for Missing Information)
+
+- If your loops have DIFFERENT names, you need to:
+  1. Replace "Apply_to_each" with your first loop name
+  2. Replace "Apply_to_each_2" with your second loop name
+
+- The action names in "runAfter" and body() must match YOUR action names:
+  • "Create_Action_Item_Task"
+  • "Create_Missing_Info_Task"
+
+====================================================================
+TROUBLESHOOTING
+====================================================================
+
+Can't find "Peek code"?
+→ Make sure you're clicking the "..." menu on the ACTION itself, not the loop
+
+Action disappears after pasting?
+→ The JSON might have an error. Undo (Ctrl+Z) and check the format
+
+Fields still empty?
+→ Try clicking "Done" on the peek code panel to save changes
+
+Connection errors?
+→ Make sure your Planner connection is set up first
+
+====================================================================
+QUICKEST METHOD - JUST IMPORT THE ZIP!
+====================================================================
+
+Honestly, the FASTEST way is still:
+
+1. Power Automate → Import → Import Package (Legacy)
+2. Upload: ScopeMapperFlow_FIXED.zip
+3. Done - all actions pre-configured!
+
+But if you want to use JSON paste, the snippets are ready in:
+ACTION_JSON_SNIPPETS.json
+
+====================================================================

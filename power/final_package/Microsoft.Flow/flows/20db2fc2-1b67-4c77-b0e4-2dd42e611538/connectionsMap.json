@@ -1,0 +1,6 @@
+{
+  "shared_planner": {
+    "type": "Microsoft.ProcessSimple/apis",
+    "suggestionType": "None"
+  }
+}

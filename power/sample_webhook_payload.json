@@ -1,0 +1,88 @@
+{
+    "timestamp": "2025-11-14T10:30:00Z",
+    "scopeDocument": {
+        "title": "NF 3PL Integration Scope",
+        "rawText": "Customer requires integration between ERP and WMS systems for inbound and outbound workflows."
+    },
+    "analysis": {
+        "detectedSystems": [
+            {
+                "name": "SAP ERP",
+                "category": "ERP",
+                "confidence": "high"
+            },
+            {
+                "name": "Manhattan WMS",
+                "category": "WMS",
+                "confidence": "medium"
+            }
+        ],
+        "detectedProcesses": [
+            {
+                "name": "Order Processing",
+                "required": true,
+                "category": "Outbound"
+            },
+            {
+                "name": "Receiving",
+                "required": true,
+                "category": "Inbound"
+            }
+        ],
+        "missingInformation": [
+            {
+                "item": "EDI Mapping Details",
+                "priority": "high",
+                "category": "Technical"
+            },
+            {
+                "item": "Carrier Integration Specs",
+                "priority": "medium",
+                "category": "Logistics"
+            }
+        ]
+    },
+    "workflows": {
+        "customerToSystem": [
+            "Order Upload",
+            "Inventory Sync"
+        ],
+        "systemToCustomer": [
+            "Order Confirmation",
+            "Shipment Updates"
+        ],
+        "inbound": [
+            "Receiving",
+            "Putaway"
+        ],
+        "outbound": [
+            "Picking",
+            "Packing",
+            "Shipping"
+        ]
+    },
+    "actionItems": [
+        {
+            "title": "Configure EDI for Orders",
+            "description": "Set up EDI mapping for order transmission between ERP and WMS.",
+            "priority": "high",
+            "category": "Integration",
+            "dueInDays": 7
+        },
+        {
+            "title": "Validate Carrier API",
+            "description": "Test carrier API for outbound shipment updates.",
+            "priority": "medium",
+            "category": "Logistics",
+            "dueInDays": 10
+        }
+    ],
+    "metadata": {
+        "systemCount": 2,
+        "processCount": 2,
+        "missingInfoCount": 2,
+        "actionItemCount": 2,
+        "source": "Webhook",
+        "documentType": "IntegrationScope"
+    }
+}

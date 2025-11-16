@@ -1,0 +1,114 @@
+====================================================================
+PASTE JSON INTO YOUR ACTIONS - CORRECTED VERSION
+====================================================================
+
+I've created ACTION_JSON_CORRECTED.json with YOUR actual loop names:
+- "Loop Through Action Items"
+- "Loop Through Missing Information"
+
+====================================================================
+OPTION 1: PASTE JSON (If you really want to do it manually)
+====================================================================
+
+For EACH of your 4 actions:
+
+1. Click on the action (e.g., "Create Action Item Task")
+2. Click "..." menu (three dots) → "Peek code"
+3. SELECT ALL the JSON in the panel (Ctrl+A)
+4. DELETE it
+5. OPEN: ACTION_JSON_CORRECTED.json
+6. COPY the JSON for that specific action
+7. PASTE into the peek code panel
+8. Click away or "Done"
+9. Fields auto-populate ✅
+
+Repeat 4 times (once for each action).
+
+====================================================================
+OPTION 2: IMPORT ZIP ⭐⭐⭐ STRONGLY RECOMMENDED
+====================================================================
+
+You already have ScopeMapperFlow_FIXED.zip with everything configured!
+
+TIME COMPARISON:
+- Manual JSON paste: 15-20 minutes (error-prone)
+- Import: 2 minutes (guaranteed to work)
+
+IMPORT STEPS:
+1. Power Automate → "My flows" → "Import"
+2. Click "Import Package (Legacy)"
+3. Upload: ScopeMapperFlow_FIXED.zip
+4. When prompted for Planner connection:
+   - Select your existing connection OR
+   - Click "Create new" and sign in
+5. Click "Import"
+6. After import, open the flow → Edit
+7. Update ONLY these 3 values:
+   - PlanID variable
+   - ActionItemsBucketID variable
+   - MissingInfoBucketID variable
+8. Save
+9. Test with webhook URL
+
+DONE! ✅
+
+====================================================================
+WHY IMPORT IS BETTER
+====================================================================
+
+✅ All 14 actions pre-configured
+✅ All expressions correct
+✅ All runAfter dependencies set
+✅ All connections mapped
+✅ Trigger schema included
+✅ Response actions included
+✅ Error handling included
+✅ No typing/paste errors
+✅ Saves 1-2 hours
+
+❌ Manual paste risks:
+- Typos in loop names
+- Missing runAfter configs
+- Connection reference errors
+- 30+ parameters to fill
+- Easy to miss fields
+
+====================================================================
+MY RECOMMENDATION
+====================================================================
+
+IMPORT THE ZIP!
+
+You've already done the hard work of:
+- Understanding the structure ✅
+- Adding the actions ✅
+- Identifying the loop names ✅
+
+Now save yourself time and use the pre-built package.
+
+The zip file is ready at:
+M:\warehouse-mapper-complete\power\ScopeMapperFlow_FIXED.zip
+
+====================================================================
+IF YOU STILL WANT TO PASTE JSON
+====================================================================
+
+The corrected JSON is in:
+ACTION_JSON_CORRECTED.json
+
+It has YOUR loop names:
+- "Loop Through Action Items"
+- "Loop Through Missing Information"
+
+Just follow the paste steps above for each of your 4 actions.
+
+====================================================================
+DECISION TIME
+====================================================================
+
+[ ] Option A: Paste JSON manually (use ACTION_JSON_CORRECTED.json)
+[ ] Option B: Import ScopeMapperFlow_FIXED.zip (recommended!)
+
+Pick one and let's get this done! 🚀
+
+====================================================================

@@ -1,0 +1,167 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" version="29.0.2">
+  <diagram name="Scope Mapper Flow" id="scope-mapper-flow">
+    <mxGraphModel dx="1416" dy="735" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Scope Mapper - Power Automate Flow Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="284.5" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="trigger" value="HTTP REQUEST TRIGGER&#xa;(Webhook)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="434.5" y="80" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="trigger-desc" value="POST Request with JSON Schema Validation&#xa;Receives Integration Scope Payload" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" parent="1" vertex="1">
+          <mxGeometry x="434.5" y="145" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2" parent="1" source="trigger" target="init-box" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="584.5" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="init-box" value="VARIABLE INITIALIZATION (Parallel)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="234.5" y="200" width="700" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="var1" value="Team ID&#xa;(Hardcoded)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+          <mxGeometry x="254.5" y="235" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="var2" value="Plan ID&#xa;(Configure)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+          <mxGeometry x="394.5" y="235" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="var3" value="Action Items&#xa;Bucket ID" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+          <mxGeometry x="534.5" y="235" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="var4" value="Missing Info&#xa;Bucket ID" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+          <mxGeometry x="674.5" y="235" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="var5" value="Project Title&#xa;(From Payload)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+          <mxGeometry x="814.5" y="235" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="init-note" value="All variables initialize in parallel&#xa;Runtime: ~1 second" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2" parent="1" vertex="1">
+          <mxGeometry x="254.5" y="300" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="init-box" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="584.5" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="split" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000" parent="1" vertex="1">
+          <mxGeometry x="574.5" y="410" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="action-loop-box" value="FOR EACH: ACTION ITEMS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="100" y="460" width="380" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="action-create" value="Create Task in Planner&#xa;&#xa;• Title from payload&#xa;• Description + metadata&#xa;• Due date (utcNow + dueInDays)&#xa;• Assign to Action Items bucket&#xa;• Set percentComplete = 0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="120" y="495" width="340" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="action-arrow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;dashed=1" parent="1" source="action-create" target="action-priority" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="action-priority" value="Set Task Priority&#xa;&#xa;• High = 1 (Urgent)&#xa;• Medium = 5 (Important)&#xa;• Low = 9 (Normal)&#xa;&#xa;Uses PATCH with If-Match header" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="120" y="600" width="340" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="missing-loop-box" value="FOR EACH: MISSING INFORMATION" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="689" y="460" width="380" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="missing-create" value="Create Task in Planner&#xa;&#xa;• Title = &quot;Gather: &quot; + item&#xa;• Description + metadata&#xa;• No due date&#xa;• Assign to Missing Info bucket&#xa;• Set percentComplete = 0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="709" y="495" width="340" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="missing-arrow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;dashed=1" parent="1" source="missing-create" target="missing-priority" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="missing-priority" value="Set Task Priority&#xa;&#xa;• High = 1 (Urgent)&#xa;• Medium = 5 (Important)&#xa;• Low = 9 (Normal)&#xa;&#xa;Uses PATCH with If-Match header" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="709" y="600" width="340" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-to-action" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="split" target="action-loop-box" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-to-missing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="split" target="missing-loop-box" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="converge" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000" parent="1" vertex="1">
+          <mxGeometry x="574.5" y="750" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-from-action" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="action-loop-box" target="converge" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-from-missing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="missing-loop-box" target="converge" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="decision" value="Success?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="519.5" y="810" width="130" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-to-decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="converge" target="decision" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="success-compose" value="Compose Success Response&#xa;&#xa;• status: &quot;success&quot;&#xa;• message&#xa;• projectTitle&#xa;• tasksCreated counts&#xa;• timestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;align=left;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="140" y="980" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="success-response" value="HTTP Response 200 OK&#xa;&#xa;Return success JSON&#xa;to webhook caller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e" parent="1" vertex="1">
+          <mxGeometry x="140" y="1110" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="error-compose" value="Compose Error Response&#xa;&#xa;• status: &quot;error&quot;&#xa;• message&#xa;• error details&#xa;• timestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top" parent="1" vertex="1">
+          <mxGeometry x="789" y="980" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="error-response" value="HTTP Response 500 Error&#xa;&#xa;Return error JSON&#xa;to webhook caller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+          <mxGeometry x="789" y="1110" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-success" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#00CC00" parent="1" source="decision" target="success-compose" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-yes" value="YES" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#00CC00" parent="1" vertex="1">
+          <mxGeometry x="400" y="860" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-error" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#CC0000" parent="1" source="decision" target="error-compose" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-no" value="NO" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#CC0000" parent="1" vertex="1">
+          <mxGeometry x="709" y="860" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-success-final" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="success-compose" target="success-response" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-error-final" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="error-compose" target="error-response" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-box" value="LEGEND" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=14;fontStyle=1;verticalAlign=top;align=left" parent="1" vertex="1">
+          <mxGeometry x="40" y="1250" width="280" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="legend1" value="Trigger" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" parent="1" vertex="1">
+          <mxGeometry x="60" y="1290" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2" value="Variables" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+          <mxGeometry x="180" y="1290" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend3" value="Loop Container" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" parent="1" vertex="1">
+          <mxGeometry x="60" y="1340" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend4" value="API Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" parent="1" vertex="1">
+          <mxGeometry x="180" y="1340" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend5" value="Success Path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e" parent="1" vertex="1">
+          <mxGeometry x="60" y="1390" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend6" value="Error Path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+          <mxGeometry x="180" y="1390" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend7" value="Decision" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" parent="1" vertex="1">
+          <mxGeometry x="110" y="1440" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="stats-box" value="FLOW STATISTICS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=14;fontStyle=1;verticalAlign=top;align=left" parent="1" vertex="1">
+          <mxGeometry x="360" y="1250" width="300" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="stats" value="Total Actions: 14&#xa;&#xa;• 5 Variable Initializations&#xa;• 2 ForEach Loops&#xa;• 4 Planner API Calls&#xa;  - 2 Create Task (POST)&#xa;  - 2 Set Priority (PATCH)&#xa;• 2 Compose Actions&#xa;• 2 HTTP Response Actions&#xa;&#xa;Typical Runtime: 5-30 seconds&#xa;&#xa;API Endpoints:&#xa;• POST /v1.0/planner/tasks&#xa;• PATCH /v1.0/planner/tasks/{id}&#xa;&#xa;Required Permissions:&#xa;• Tasks.ReadWrite" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" parent="1" vertex="1">
+          <mxGeometry x="380" y="1285" width="260" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="notes-box" value="DEPLOYMENT NOTES" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=14;fontStyle=1;verticalAlign=top;align=left" parent="1" vertex="1">
+          <mxGeometry x="720" y="1250" width="400" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="notes" value="Configuration Required:&#xa;&#xa;1. Plan ID - Get from Get-PlannerIDs.ps1&#xa;2. Action Items Bucket ID&#xa;3. Missing Information Bucket ID&#xa;&#xa;Webhook Payload Schema:&#xa;&#xa;{&#xa;  &quot;scopeDocument&quot;: { &quot;title&quot;, &quot;rawText&quot; },&#xa;  &quot;actionItems&quot;: [{ title, description, priority, dueInDays }],&#xa;  &quot;analysis&quot;: {&#xa;    &quot;missingInformation&quot;: [{ item, priority, category }]&#xa;  }&#xa;}&#xa;&#xa;Priority Mapping:&#xa;• &quot;high&quot; → 1 (Urgent)&#xa;• &quot;medium&quot; → 5 (Important)&#xa;• &quot;low&quot; → 9 (Normal)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;fontFamily=Courier New" parent="1" vertex="1">
+          <mxGeometry x="740" y="1285" width="360" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" value="Scope Mapper v1.0.0 | Generated 2025-11-14 | Microsoft Power Automate Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2" parent="1" vertex="1">
+          <mxGeometry x="284.5" y="1580" width="600" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Mapper Configuration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: #e9ecef;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 Warehouse Mapper Configuration</h1>
+            <p>Fill out the form below to configure your warehouse integration</p>
+        </div>
+
+        <div class="form-content">
+            <form id="configForm">
+                <!-- Basic Information -->
+                <div class="section-title">📋 Basic Information</div>
+
+                <div class="form-group">
+                    <label for="projectName">Project Name *</label>
+                    <input type="text" id="projectName" name="projectName" required placeholder="e.g., ACME Warehouse Integration">
+                    <div class="help-text">A descriptive name for your warehouse project</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerId">Customer ID *</label>
+                    <input type="text" id="customerId" name="customerId" required placeholder="e.g., ACME-001">
+                    <div class="help-text">Unique identifier for the customer</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerName">Customer Name *</label>
+                    <input type="text" id="customerName" name="customerName" required placeholder="e.g., ACME Corporation">
+                </div>
+
+                <div class="form-group">
+                    <label for="contactEmail">Contact Email *</label>
+                    <input type="email" id="contactEmail" name="contactEmail" required placeholder="e.g., john@acme.com">
+                </div>
+
+                <!-- Warehouse Type -->
+                <div class="section-title">🏢 Warehouse Configuration</div>
+
+                <div class="form-group">
+                    <label for="warehouseType">Warehouse Type *</label>
+                    <select id="warehouseType" name="warehouseType" required>
+                        <option value="">Select warehouse type...</option>
+                        <option value="ecommerce">E-commerce Fulfillment</option>
+                        <option value="3pl">Third-Party Logistics (3PL)</option>
+                        <option value="distribution">Distribution Center</option>
+                        <option value="crossdock">Cross-Dock</option>
+                        <option value="retail">Retail Warehouse</option>
+                        <option value="manufacturing">Manufacturing Warehouse</option>
+                        <option value="custom">Custom Integration</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="warehouseLocation">Warehouse Location</label>
+                    <input type="text" id="warehouseLocation" name="warehouseLocation" placeholder="e.g., Melbourne, Australia">
+                </div>
+
+                <!-- Operations -->
+                <div class="section-title">⚙️ Warehouse Operations</div>
+
+                <div class="form-group">
+                    <label>Select Operations to Include:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="op_receiving" name="operations" value="receiving" checked>
+                            <label for="op_receiving">Receiving</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="op_putaway" name="operations" value="putaway" checked>
+                            <label for="op_putaway">Put-away</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="op_storage" name="operations" value="storage" checked>
+                            <label for="op_storage">Storage</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="op_picking" name="operations" value="picking" checked>
+                            <label for="op_picking">Picking</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="op_packing" name="operations" value="packing" checked>
+                            <label for="op_packing">Packing</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="op_dispatch" name="operations" value="dispatch" checked>
+                            <label for="op_dispatch">Dispatch</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="op_qc" name="operations" value="qc">
+                            <label for="op_qc">Quality Control</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="op_returns" name="operations" value="returns">
+                            <label for="op_returns">Returns</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Systems Integration -->
+                <div class="section-title">🔌 Systems Integration</div>
+
+                <div class="form-group">
+                    <label>Select Systems to Integrate:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sys_cargowise" name="systems" value="cargowise">
+                            <label for="sys_cargowise">CargoWise</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sys_shopify" name="systems" value="shopify">
+                            <label for="sys_shopify">Shopify</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sys_woocommerce" name="systems" value="woocommerce">
+                            <label for="sys_woocommerce">WooCommerce</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sys_wms" name="systems" value="wms">
+                            <label for="sys_wms">WMS System</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sys_erp" name="systems" value="erp">
+                            <label for="sys_erp">ERP System</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sys_tms" name="systems" value="tms">
+                            <label for="sys_tms">TMS (Transport)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="otherSystems">Other Systems (comma-separated)</label>
+                    <input type="text" id="otherSystems" name="otherSystems" placeholder="e.g., SAP, Oracle, Custom API">
+                </div>
+
+                <!-- Message Types -->
+                <div class="section-title">📨 Data Messages</div>
+
+                <div class="form-group">
+                    <label>Select Message Types to Include:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="msg_asn" name="messages" value="asn" checked>
+                            <label for="msg_asn">ASN (Advance Ship Notice)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="msg_pickorder" name="messages" value="pickorder" checked>
+                            <label for="msg_pickorder">Pick Orders</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="msg_packconfirm" name="messages" value="packconfirm" checked>
+                            <label for="msg_packconfirm">Pack Confirmation</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="msg_manifest" name="messages" value="manifest" checked>
+                            <label for="msg_manifest">Manifest</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="msg_inventory" name="messages" value="inventory">
+                            <label for="msg_inventory">Inventory Updates</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="msg_exception" name="messages" value="exception">
+                            <label for="msg_exception">Exception Reports</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Requirements -->
+                <div class="section-title">📝 Additional Requirements</div>
+
+                <div class="form-group">
+                    <label for="specialRequirements">Special Requirements or Notes</label>
+                    <textarea id="specialRequirements" name="specialRequirements" placeholder="Enter any special requirements, custom workflows, or additional notes..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="expectedVolume">Expected Daily Volume</label>
+                    <input type="text" id="expectedVolume" name="expectedVolume" placeholder="e.g., 500 orders/day, 100 receipts/day">
+                </div>
+
+                <!-- Database Configuration -->
+                <div class="section-title">🗄️ Database Configuration</div>
+
+                <div class="form-group">
+                    <label for="dbHost">Database Host</label>
+                    <input type="text" id="dbHost" name="dbHost" value="localhost" placeholder="e.g., localhost or db.example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="dbPort">Database Port</label>
+                    <input type="text" id="dbPort" name="dbPort" value="5432" placeholder="e.g., 5432">
+                </div>
+
+                <div class="form-group">
+                    <label for="dbName">Database Name</label>
+                    <input type="text" id="dbName" name="dbName" value="warehouse_mapper" placeholder="e.g., warehouse_mapper">
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="button-group">
+                    <button type="button" class="btn-secondary" onclick="resetForm()">Reset Form</button>
+                    <button type="submit" class="btn-primary">Save Configuration</button>
+                </div>
+
+                <div id="successMessage" class="success-message">
+                    ✅ Configuration saved successfully! The data has been saved to config-data.json.
+                    You can now tell Claude to read and process this configuration.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('configForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect form data
+            const formData = {
+                basicInfo: {
+                    projectName: document.getElementById('projectName').value,
+                    customerId: document.getElementById('customerId').value,
+                    customerName: document.getElementById('customerName').value,
+                    contactEmail: document.getElementById('contactEmail').value,
+                },
+                warehouse: {
+                    type: document.getElementById('warehouseType').value,
+                    location: document.getElementById('warehouseLocation').value,
+                    expectedVolume: document.getElementById('expectedVolume').value,
+                },
+                operations: Array.from(document.querySelectorAll('input[name="operations"]:checked')).map(cb => cb.value),
+                systems: Array.from(document.querySelectorAll('input[name="systems"]:checked')).map(cb => cb.value),
+                otherSystems: document.getElementById('otherSystems').value.split(',').map(s => s.trim()).filter(s => s),
+                messages: Array.from(document.querySelectorAll('input[name="messages"]:checked')).map(cb => cb.value),
+                additionalInfo: {
+                    specialRequirements: document.getElementById('specialRequirements').value,
+                },
+                database: {
+                    host: document.getElementById('dbHost').value,
+                    port: document.getElementById('dbPort').value,
+                    name: document.getElementById('dbName').value,
+                },
+                timestamp: new Date().toISOString()
+            };
+
+            // Save to localStorage
+            localStorage.setItem('warehouseMapperConfig', JSON.stringify(formData, null, 2));
+
+            // Create downloadable JSON
+            const dataStr = JSON.stringify(formData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'config-data.json';
+            link.click();
+
+            // Show success message
+            document.getElementById('successMessage').classList.add('show');
+
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('successMessage').classList.remove('show');
+            }, 5000);
+        });
+
+        function resetForm() {
+            if (confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+                document.getElementById('configForm').reset();
+                document.getElementById('successMessage').classList.remove('show');
+            }
+        }
+
+        // Load saved config if exists
+        window.addEventListener('load', function() {
+            const savedConfig = localStorage.getItem('warehouseMapperConfig');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+
+                // Load basic info
+                document.getElementById('projectName').value = config.basicInfo.projectName || '';
+                document.getElementById('customerId').value = config.basicInfo.customerId || '';
+                document.getElementById('customerName').value = config.basicInfo.customerName || '';
+                document.getElementById('contactEmail').value = config.basicInfo.contactEmail || '';
+
+                // Load warehouse info
+                document.getElementById('warehouseType').value = config.warehouse.type || '';
+                document.getElementById('warehouseLocation').value = config.warehouse.location || '';
+                document.getElementById('expectedVolume').value = config.warehouse.expectedVolume || '';
+
+                // Load operations checkboxes
+                config.operations.forEach(op => {
+                    const checkbox = document.getElementById(`op_${op}`);
+                    if (checkbox) checkbox.checked = true;
+                });
+
+                // Load systems checkboxes
+                config.systems.forEach(sys => {
+                    const checkbox = document.getElementById(`sys_${sys}`);
+                    if (checkbox) checkbox.checked = true;
+                });
+
+                // Load messages checkboxes
+                config.messages.forEach(msg => {
+                    const checkbox = document.getElementById(`msg_${msg}`);
+                    if (checkbox) checkbox.checked = true;
+                });
+
+                // Load other fields
+                document.getElementById('otherSystems').value = config.otherSystems.join(', ');
+                document.getElementById('specialRequirements').value = config.additionalInfo.specialRequirements || '';
+                document.getElementById('dbHost').value = config.database.host || 'localhost';
+                document.getElementById('dbPort').value = config.database.port || '5432';
+                document.getElementById('dbName').value = config.database.name || 'warehouse_mapper';
+            }
+        });
+    </script>
+</body>
+</html>

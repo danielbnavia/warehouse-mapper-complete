@@ -1,0 +1,77 @@
+====================================================================
+POWER AUTOMATE FLOW - PARAMETER CONFIGURATION VALUES
+====================================================================
+
+LOOP 1: ACTION ITEMS (Apply_to_each)
+====================================================================
+
+ACTION 1: Create Action Item Task
+----------------------------------
+Plan Id: variables('PlanID')
+Bucket Id: variables('ActionItemsBucketID')
+Title: items('Apply_to_each')?['title']
+Assignments: {}
+Percent Complete: 0
+Due DateTime: addDays(utcNow(), items('Apply_to_each')?['dueInDays'])
+Details/Description: concat(items('Apply_to_each')?['description'], char(10), char(10), 'Priority: ', items('Apply_to_each')?['priority'], char(10), 'Category: ', items('Apply_to_each')?['category'], char(10), 'Project: ', variables('ProjectTitle'))
+
+ACTION 2: Set Task Priority
+---------------------------
+Task Id: body('Create_Action_Item_Task')?['id']
+If-Match: body('Create_Action_Item_Task')?['@odata.etag']
+Priority: if(equals(items('Apply_to_each')?['priority'], 'high'), 1, if(equals(items('Apply_to_each')?['priority'], 'medium'), 5, 9))
+
+Run After: Create_Action_Item_Task (is successful)
+
+
+LOOP 2: MISSING INFORMATION (Apply_to_each_2)
+====================================================================
+
+ACTION 3: Create Missing Info Task
+----------------------------------
+Plan Id: variables('PlanID')
+Bucket Id: variables('MissingInfoBucketID')
+Title: concat('Gather: ', items('Apply_to_each_2')?['item'])
+Assignments: {}
+Percent Complete: 0
+Due DateTime: (leave empty - no due date)
+Details/Description: concat('Missing Information Item', char(10), char(10), 'Category: ', items('Apply_to_each_2')?['category'], char(10), 'Priority: ', items('Apply_to_each_2')?['priority'], char(10), 'Project: ', variables('ProjectTitle'))
+
+ACTION 4: Set Missing Info Priority
+-----------------------------------
+Task Id: body('Create_Missing_Info_Task')?['id']
+If-Match: body('Create_Missing_Info_Task')?['@odata.etag']
+Priority: if(equals(items('Apply_to_each_2')?['priority'], 'high'), 1, if(equals(items('Apply_to_each_2')?['priority'], 'medium'), 5, 9))
+
+Run After: Create_Missing_Info_Task (is successful)
+
+
+REQUIRED VARIABLES (must be initialized BEFORE loops)
+====================================================================
+1. TeamID (String): 6cdbd2a2-7e69-492e-ad7e-a617ed1c6597
+2. PlanID (String): <YOUR_PLAN_ID_HERE>
+3. ActionItemsBucketID (String): <YOUR_BUCKET_ID_HERE>
+4. MissingInfoBucketID (String): <YOUR_BUCKET_ID_HERE>
+5. ProjectTitle (String): triggerBody()?['scopeDocument']?['title']
+
+
+NOTES
+====================================================================
+- For "Dynamic content" fields: Click variable from list
+- For "Expression" fields: Click Expression tab, paste value, click OK
+- Replace loop names if different (Apply_to_each, Apply_to_each_2)
+- Run Get-PlannerIDs.ps1 to get your Plan ID and Bucket IDs
+
+
+ALTERNATIVE: IMPORT PRECONFIGURED FLOW
+====================================================================
+Instead of manually configuring 30+ parameters, you can:
+
+1. Go to Power Automate → My flows → Import
+2. Click "Import Package (Legacy)"
+3. Upload: ScopeMapperFlow_FIXED.zip
+4. Configure Planner connection
+5. Update the 3 variable IDs (Plan, ActionItems Bucket, MissingInfo Bucket)
+6. Save and test
+
+This saves time and ensures all parameters are correct!

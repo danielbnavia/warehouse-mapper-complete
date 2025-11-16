@@ -1,0 +1,75 @@
+====================================================================
+METHOD 1: NETWORK TAB APPROACH (EASIEST!)
+====================================================================
+
+The Planner page loads bucket data via API calls. Let's capture it!
+
+STEPS:
+1. Keep DevTools open
+2. Click the "Network" tab (next to Console)
+3. In the filter box, type: buckets
+4. Refresh the page (F5 or Ctrl+R)
+5. Look for requests with "buckets" in the name
+6. Click on one of them
+7. Click the "Response" tab
+8. You'll see JSON with bucket IDs!
+
+Look for JSON like:
+{
+  "value": [
+    {
+      "id": "actual-bucket-id-1",
+      "name": "Action Items",
+      ...
+    },
+    {
+      "id": "actual-bucket-id-2",
+      "name": "Missing Information",
+      ...
+    }
+  ]
+}
+
+PASTE THE ENTIRE RESPONSE HERE!
+
+====================================================================
+METHOD 2: GRAPH API DIRECT (IF NETWORK TAB DOESN'T SHOW BUCKETS)
+====================================================================
+
+Go to: https://developer.microsoft.com/en-us/graph/graph-explorer
+
+Run this query:
+GET https://graph.microsoft.com/v1.0/planner/plans/c693904c-956a-4bb9-984e-20e57b622817/buckets
+
+If it asks for permissions:
+- Click "Consent to permissions"
+- Check "Tasks.Read"
+- Click "Consent"
+- Run the query again
+
+PASTE THE RESPONSE HERE!
+
+====================================================================
+METHOD 3: MANUAL FROM URL (IF ABOVE METHODS FAIL)
+====================================================================
+
+When you click on a bucket in Planner, the URL changes to show the bucket ID!
+
+1. In Planner, click on the "Action Items" bucket header
+2. Look at the URL bar - it should show something like:
+   https://planner.cloud.microsoft/...&bucketId=SOME-ID-HERE
+3. Copy that bucket ID
+4. Repeat for "Missing Information" bucket
+
+PASTE BOTH IDs HERE!
+
+====================================================================
+CURRENT IDs WE NEED:
+====================================================================
+
+✅ Team ID: 6cdbd2a2-7e69-492e-ad7e-a617ed1c6597
+✅ Plan ID: c693904c-956a-4bb9-984e-20e57b622817
+❌ Action Items Bucket ID: ???
+❌ Missing Information Bucket ID: ???
+
+====================================================================

@@ -1,0 +1,19 @@
+{
+  "packageSchemaVersion": "1.0",
+  "creator": "Claude",
+  "sourceEnvironment": "Default-2131d362-e12d-44c1-843b-a1413d6b96a3",
+  "resources": [
+    {
+      "id": "20db2fc2-1b67-4c77-b0e4-2dd42e611538",
+      "name": "Scope Mapper - Create Planner Tasks from Webhook",
+      "type": "Microsoft.Flow/flows",
+      "creationType": "New",
+      "details": {
+        "displayName": "Scope Mapper - Create Planner Tasks from Webhook"
+      },
+      "configurableBy": "User",
+      "hierarchy": "Root",
+      "dependsOn": []
+    }
+  ]
+}

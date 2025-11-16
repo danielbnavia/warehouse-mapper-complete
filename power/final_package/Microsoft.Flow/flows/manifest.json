@@ -1,0 +1,9 @@
+{
+  "packageSchemaVersion": "1.0",
+  "flowAssets": [
+    {
+      "assetType": "Microsoft.Flow/flows",
+      "name": "20db2fc2-1b67-4c77-b0e4-2dd42e611538"
+    }
+  ]
+}

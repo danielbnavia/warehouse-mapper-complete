@@ -1,0 +1,186 @@
+import { ComponentItem } from '@/types';
+
+export const OPERATION_COMPONENTS: ComponentItem[] = [
+  {
+    id: 'receiving',
+    label: 'Receiving Dock',
+    icon: '🚪',
+    type: 'operation',
+    category: 'receiving',
+  },
+  {
+    id: 'putaway',
+    label: 'Putaway Zone',
+    icon: '📦',
+    type: 'operation',
+    category: 'putaway',
+  },
+  {
+    id: 'storage',
+    label: 'Storage Area',
+    icon: '🏪',
+    type: 'operation',
+    category: 'storage',
+  },
+  {
+    id: 'picking',
+    label: 'Picking Zone',
+    icon: '🛒',
+    type: 'operation',
+    category: 'picking',
+  },
+  {
+    id: 'packing',
+    label: 'Pack Station',
+    icon: '📮',
+    type: 'operation',
+    category: 'packing',
+  },
+  {
+    id: 'dispatch',
+    label: 'Dispatch Area',
+    icon: '🚚',
+    type: 'operation',
+    category: 'dispatch',
+  },
+  {
+    id: 'qc',
+    label: 'QC Station',
+    icon: '🔍',
+    type: 'operation',
+    category: 'qc',
+  },
+  {
+    id: 'returns',
+    label: 'Returns Processing',
+    icon: '↩️',
+    type: 'operation',
+    category: 'returns',
+  },
+];
+
+export const MESSAGE_COMPONENTS: ComponentItem[] = [
+  {
+    id: 'asn',
+    label: 'ASN',
+    icon: '📧',
+    type: 'message',
+    messageType: 'ASN',
+    frequency: 'realtime',
+  },
+  {
+    id: 'pick',
+    label: 'Pick Order',
+    icon: '📋',
+    type: 'message',
+    messageType: 'PickOrder',
+    frequency: 'batch',
+  },
+  {
+    id: 'pack',
+    label: 'Pack Confirmation',
+    icon: '✅',
+    type: 'message',
+    messageType: 'PackConfirm',
+    frequency: 'realtime',
+  },
+  {
+    id: 'manifest',
+    label: 'Shipping Manifest',
+    icon: '📄',
+    type: 'message',
+    messageType: 'Manifest',
+    frequency: 'scheduled',
+  },
+  {
+    id: 'inventory',
+    label: 'Inventory Update',
+    icon: '📊',
+    type: 'message',
+    messageType: 'InventoryUpdate',
+    frequency: 'batch',
+  },
+  {
+    id: 'exception',
+    label: 'Exception Alert',
+    icon: '⚠️',
+    type: 'message',
+    messageType: 'Exception',
+    frequency: 'event-driven',
+  },
+];
+
+export const SYSTEM_COMPONENTS: ComponentItem[] = [
+  {
+    id: 'cargowise',
+    label: 'CargoWise One',
+    icon: '🖥️',
+    type: 'system',
+    systemType: 'TMS',
+  },
+  {
+    id: 'shopify',
+    label: 'Shopify',
+    icon: '🛍️',
+    type: 'system',
+    systemType: 'E-commerce',
+  },
+  {
+    id: 'woocommerce',
+    label: 'WooCommerce',
+    icon: '🛒',
+    type: 'system',
+    systemType: 'E-commerce',
+  },
+  {
+    id: 'netsuite',
+    label: 'NetSuite',
+    icon: '💼',
+    type: 'system',
+    systemType: 'ERP',
+  },
+  {
+    id: 'sap',
+    label: 'SAP',
+    icon: '🏢',
+    type: 'system',
+    systemType: 'ERP',
+  },
+  {
+    id: 'machship',
+    label: 'MachShip',
+    icon: '📦',
+    type: 'system',
+    systemType: 'TMS',
+  },
+  {
+    id: 'shipstation',
+    label: 'ShipStation',
+    icon: '🚢',
+    type: 'system',
+    systemType: 'Shipping',
+  },
+  {
+    id: 'wms',
+    label: 'Custom WMS',
+    icon: '⚙️',
+    type: 'system',
+    systemType: 'WMS',
+  },
+  {
+    id: 'raft',
+    label: 'Raft.ai',
+    icon: '🤖',
+    type: 'system',
+    systemType: 'Automation',
+  },
+];
+
+export const MESSAGE_TYPE_COLORS: Record<string, string> = {
+  ASN: 'bg-green-50 border-green-400 text-green-700',
+  PickOrder: 'bg-yellow-50 border-yellow-400 text-yellow-700',
+  PackConfirm: 'bg-orange-50 border-orange-400 text-orange-700',
+  Manifest: 'bg-blue-50 border-blue-400 text-blue-700',
+  InventoryUpdate: 'bg-purple-50 border-purple-400 text-purple-700',
+  Exception: 'bg-red-50 border-red-400 text-red-700',
+};
